@@ -1,13 +1,7 @@
 node_modules
-npm-debug.log
 dist
+.env
 .git
 .gitignore
-README.md
-.env.test
-.nyc_output
-coverage
-tests
-jest.config.mjs
-tsconfig.test.json
-.github
+.vscode
+npm-debug.log
