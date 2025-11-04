@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "ts-node src/server.ts",
+    "dev": "npx ts-node -r tsconfig-paths/register src/server.ts",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint . --ext .ts",
@@ -38,6 +38,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.2.0",
     "supertest": "^7.1.4",
-    "ts-jest": "^29.4.5"
+    "ts-jest": "^29.4.5",
+    "tsconfig-paths": "^4.2.0"
   }
 }
