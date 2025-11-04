@@ -26,6 +26,8 @@
     "mongoose": "^8.19.2",
     "prettier": "^3.6.2",
     "redis": "^5.9.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
@@ -38,7 +40,6 @@
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.2.0",
     "supertest": "^7.1.4",
-    "ts-jest": "^29.4.5",
-    "tsconfig-paths": "^4.2.0"
+    "ts-jest": "^29.4.5"
   }
 }
