@@ -16,10 +16,7 @@ services:
       - mongo
       - redis
       - rabbitmq
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: npm run dev
+    command: npm start
 
   mongo:
     image: mongo:latest
