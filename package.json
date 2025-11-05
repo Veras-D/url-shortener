@@ -5,13 +5,15 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "npx ts-node -r tsconfig-paths/register src/server.ts",
-    "build": "tsc",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc && tsc-alias",
     "test": "jest",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "prettier": "prettier --write \"src/**/*.ts\"",
-    "compose:up": "docker compose up --build"
+    "compose:dev": "docker compose -f docker-compose.dev.yml up --build",
+    "compose:prod": "docker compose up --build",
+    "debug": "docker compose run --rm api sh"
   },
   "keywords": [],
   "author": "",
@@ -26,8 +28,6 @@
     "mongoose": "^8.19.2",
     "prettier": "^3.6.2",
     "redis": "^5.9.0",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
@@ -40,6 +40,8 @@
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.2.0",
     "supertest": "^7.1.4",
-    "ts-jest": "^29.4.5"
+    "ts-jest": "^29.4.5",
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.19.4"
   }
 }
