@@ -8,3 +8,4 @@ yarn-error.log*
 *.log
 *.tgz
 .vscode/
+dist/
