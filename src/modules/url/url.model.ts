@@ -1,20 +1,11 @@
-<<<<<<< HEAD
 import mongoose, { Document, Schema, Types } from 'mongoose';
-=======
-import mongoose, { Document, Schema } from 'mongoose';
->>>>>>> 7d546940ad39f804acdc97def008121dbf71a8e6
 
 export interface IUrl extends Document {
   originalUrl: string;
   shortCode: string;
-<<<<<<< HEAD
   userId: Types.ObjectId;
   visitCount: number;
   createdAt: Date;
-=======
-  createdAt: Date;
-  visitCount: number;
->>>>>>> 7d546940ad39f804acdc97def008121dbf71a8e6
   updatedAt: Date;
 }
 
