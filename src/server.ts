@@ -1,5 +1,5 @@
 import app from './app';
-import connectDB from '@config/mongo';
+import { connectDB } from '@config/mongo';
 import { connectRabbitMQ } from '@config/rabbitmq';
 import { connectRedis } from '@config/redis';
 
