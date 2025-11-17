@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { createShortUrl, findByShortCode } from './url.service';
 import { publish } from '@config/rabbitmq';
+import logger from '@libs/logger';
 
 class UrlController {
   async shortenUrl(req: Request, res: Response, next: NextFunction) {
@@ -27,6 +28,7 @@ class UrlController {
       // Don't wait for the publish to complete
       publish('url_visits', JSON.stringify({ shortCode }));
 
+      logger.info(`Redirecting shortCode: ${shortCode} to ${url.originalUrl}`);
       res.redirect(301, url.originalUrl);
     } catch (error) {
       next(error);
