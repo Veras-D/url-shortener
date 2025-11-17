@@ -67,4 +67,25 @@ describe('URL Integration Tests', () => {
       expect(response.status).toBe(404);
     });
   });
+
+  describe('DELETE /api/urls/:shortCode', () => {
+    it('should delete a URL and return a 204 status', async () => {
+      const createResponse = await request(app)
+        .post('/api/shorten')
+        .send({ url: 'https://www.example.com/to-be-deleted' });
+
+      const shortCode = createResponse.body.shortCode;
+
+      const deleteResponse = await request(app).delete(`/api/urls/${shortCode}`);
+      expect(deleteResponse.status).toBe(204);
+
+      const getResponse = await request(app).get(`/${shortCode}`);
+      expect(getResponse.status).toBe(404);
+    });
+
+    it('should return a 404 error for a non-existent short code', async () => {
+      const response = await request(app).delete('/api/urls/nonexistent');
+      expect(response.status).toBe(404);
+    });
+  });
 });

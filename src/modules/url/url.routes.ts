@@ -11,4 +11,6 @@ urlRoutes.post(
   urlController.shortenUrl
 );
 
+urlRoutes.delete('/urls/:shortCode', urlController.deleteUrl);
+
 export { urlRoutes };
