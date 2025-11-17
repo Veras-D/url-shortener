@@ -7,8 +7,8 @@ const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
   await connectDB();
-  // await connectRabbitMQ();
-  // await connectRedis();
+  await connectRabbitMQ();
+  await connectRedis();
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });

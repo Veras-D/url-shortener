@@ -1,14 +1,22 @@
 import request from 'supertest';
 import app from '../../../app';
 import { connectDB, disconnectDB } from '../../../config/mongo';
+import { connectRabbitMQ, disconnectRabbitMQ } from '../../../config/rabbitmq';
+import { connectRedis, disconnectRedis } from '../../../config/redis';
+import Url from '../url.model';
 
 describe('URL Integration Tests', () => {
   beforeAll(async () => {
     await connectDB();
+    await connectRabbitMQ();
+    await connectRedis();
   });
 
   afterAll(async () => {
+    await Url.deleteMany({});
     await disconnectDB();
+    await disconnectRabbitMQ();
+    await disconnectRedis();
   });
 
   describe('POST /api/shorten', () => {
@@ -37,6 +45,26 @@ describe('URL Integration Tests', () => {
         .send({});
 
       expect(response.status).toBe(400);
+    });
+  });
+
+  describe('GET /:shortCode', () => {
+    it('should redirect to the original URL for a valid short code', async () => {
+      const createResponse = await request(app)
+        .post('/api/shorten')
+        .send({ url: 'https://www.example.com' });
+
+      const shortCode = createResponse.body.shortCode;
+
+      const redirectResponse = await request(app).get(`/${shortCode}`);
+
+      expect(redirectResponse.status).toBe(301);
+      expect(redirectResponse.headers.location).toBe('https://www.example.com');
+    });
+
+    it('should return a 404 error for a non-existent short code', async () => {
+      const response = await request(app).get('/nonexistent');
+      expect(response.status).toBe(404);
     });
   });
 });

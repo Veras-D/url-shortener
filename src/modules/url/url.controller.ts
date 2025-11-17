@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { createShortUrl } from './url.service';
+import { createShortUrl, findByShortCode } from './url.service';
+import { publish } from '@config/rabbitmq';
 
 class UrlController {
   async shortenUrl(req: Request, res: Response, next: NextFunction) {
@@ -13,6 +14,20 @@ class UrlController {
         shortUrl,
         shortCode: newUrl.shortCode,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async redirect(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { shortCode } = req.params;
+      const url = await findByShortCode(shortCode);
+
+      // Don't wait for the publish to complete
+      publish('url_visits', JSON.stringify({ shortCode }));
+
+      res.redirect(301, url.originalUrl);
     } catch (error) {
       next(error);
     }
