@@ -8,6 +8,7 @@ interface IEnvConfig {
   MONGO_URI: string;
   REDIS_URL: string;
   RABBITMQ_URL: string;
+  TOP_N_URLS: string;
 }
 
 const env: IEnvConfig = {
@@ -16,6 +17,7 @@ const env: IEnvConfig = {
   MONGO_URI: process.env.MONGO_URI || 'mongodb://localhost:27017/url-shortener',
   REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
   RABBITMQ_URL: process.env.RABBITMQ_URL || 'amqp://localhost:5672',
+  TOP_N_URLS: process.env.TOP_N_URLS || '100',
 };
 
 export default env;
