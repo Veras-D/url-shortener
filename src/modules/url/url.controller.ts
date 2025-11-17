@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createShortUrl, findByShortCode } from './url.service';
+import { createShortUrl, findByShortCode, deleteUrl } from './url.service';
 import { publish } from '@config/rabbitmq';
 import logger from '@libs/logger';
 
@@ -30,6 +30,16 @@ class UrlController {
 
       logger.info(`Redirecting shortCode: ${shortCode} to ${url.originalUrl}`);
       res.redirect(301, url.originalUrl);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteUrl(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { shortCode } = req.params;
+      await deleteUrl(shortCode);
+      res.status(204).send();
     } catch (error) {
       next(error);
     }
