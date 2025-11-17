@@ -1,16 +1,30 @@
-import amqp from 'amqplib';
+import * as amqp from 'amqplib';
 import env from './env';
 
-let channel: amqp.Channel | null = null;
+let channel: any | null = null;
+let connection: any | null = null;
 
 const connectRabbitMQ = async (): Promise<void> => {
   try {
-    const connection = await amqp.connect(env.RABBITMQ_URL);
+    connection = await amqp.connect(env.RABBITMQ_URL);
     channel = await connection.createChannel();
-    console.log('RabbitMQ connected successfully.');
   } catch (error) {
-    console.error('RabbitMQ connection error:', error);
-    process.exit(1);
+    throw error;
+  }
+};
+
+const disconnectRabbitMQ = async (): Promise<void> => {
+  try {
+    if (channel) {
+      await channel.close();
+      channel = null;
+    }
+    if (connection) {
+      await connection.close();
+      connection = null;
+    }
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -30,4 +44,4 @@ const consume = async (queue: string, callback: (msg: amqp.ConsumeMessage | null
   channel.consume(queue, callback, { noAck: true });
 };
 
-export { connectRabbitMQ, publish, consume };
+export { connectRabbitMQ, disconnectRabbitMQ, publish, consume };
