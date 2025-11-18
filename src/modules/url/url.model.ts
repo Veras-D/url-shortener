@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
+import { required } from 'zod/v4/core/util.cjs';
 
 export interface IUrl extends Document {
   originalUrl: string;
@@ -29,6 +30,7 @@ const UrlSchema: Schema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    required: true
   },
   visitCount: {
     type: Number,

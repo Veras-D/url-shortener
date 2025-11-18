@@ -1,9 +1,11 @@
 import request from 'supertest';
+import mongoose from 'mongoose';
 import createApp from '../../../app';
 import { redisClient } from '../../../config/redis';
 import createRateLimiter from '../../../libs/rateLimiter';
 
 let app: any;
+const userId = new mongoose.Types.ObjectId().toHexString();
 
 beforeAll(() => {
   const rateLimiter = createRateLimiter(redisClient as any);
@@ -29,7 +31,7 @@ describe('URL Rate Limiting', () => {
           request(app)
             .post('/api/shorten')
             .set('X-Forwarded-For', ip)
-            .send({ url })
+            .send({ url, userId })
         );
       }
 
@@ -48,16 +50,19 @@ describe('URL Rate Limiting', () => {
         await request(app)
           .post('/api/shorten')
           .set('X-Forwarded-For', ip)
-          .send({ url });
+          .send({ url, userId });
       }
 
       const response = await request(app)
         .post('/api/shorten')
         .set('X-Forwarded-For', ip)
-        .send({ url });
+        .send({ url, userId });
 
       expect(response.status).toBe(429);
-      expect(response.body).toHaveProperty('message', 'Too many requests, please try again later.');
+      expect(response.body).toHaveProperty(
+        'message',
+        'Too many requests, please try again later.'
+      );
       expect(response.headers).toHaveProperty('ratelimit-limit', '5');
       expect(response.headers).toHaveProperty('ratelimit-remaining', '0');
     }, 15000);

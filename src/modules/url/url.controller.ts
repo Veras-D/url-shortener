@@ -4,9 +4,9 @@ import { createShortUrl } from './url.service';
 class UrlController {
   async shortenUrl(req: Request, res: Response, next: NextFunction) {
     try {
-      const { url } = req.body;
+      const { url, userId } = req.body;
       // TODO: Replace with actual user ID from authentication
-      const newUrl = await createShortUrl(url, 'anonymous');
+      const newUrl = await createShortUrl(url, userId);
       const shortUrl = `${req.protocol}://${req.get('host')}/${newUrl.shortCode}`;
 
       res.status(201).json({
