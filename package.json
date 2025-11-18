@@ -25,10 +25,8 @@
     "dotenv": "^17.2.3",
     "eslint": "^9.39.0",
     "express": "^5.1.0",
-    "express-rate-limit": "^8.2.1",
     "mongoose": "^8.19.2",
     "prettier": "^3.6.2",
-    "rate-limit-redis": "^4.2.3",
     "redis": "^5.9.0",
     "typescript": "^5.9.3",
     "zod": "^4.1.12"
