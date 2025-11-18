@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
 export const shortenUrlSchema = z.object({
-  url: z.string().url({ message: 'Invalid URL format' }),
+  url: z.url({ message: 'Invalid URL format' }),
   userId: z.string().nonempty({ message: 'User ID is required' }),
 });
