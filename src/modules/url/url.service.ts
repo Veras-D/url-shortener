@@ -20,10 +20,10 @@ export const createShortUrl = async (originalUrl: string, userId?: string | Type
   const shortCode = await generateShortCode();
 
   let finalUserId: Types.ObjectId;
-  if (typeof userId === 'string') {
+  if (typeof userId === 'string' || userId === undefined) {
     // For testing or anonymous users, generate a new ObjectId
     finalUserId = new Types.ObjectId();
-  } else if (userId) {
+  } else {
     finalUserId = userId;
   }
 
