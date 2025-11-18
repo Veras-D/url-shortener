@@ -1,17 +1,25 @@
 import request from 'supertest';
-import app from '../../../app';
-import { connectDB, disconnectDB } from '../../../config/mongo';
+import createApp from '../../../app';
+import createRateLimiter from '../../../libs/rateLimiter';
+import { redisClient } from '../../../config/redis';
+import { rateLimit } from 'express-rate-limit';
+
+let app: any;
+
+beforeAll(() => {
+  const rateLimiter = createRateLimiter(redisClient as any);
+  app = createApp(rateLimiter);
+});
 
 describe('URL Integration Tests', () => {
-  beforeAll(async () => {
-    await connectDB();
-  });
-
-  afterAll(async () => {
-    await disconnectDB();
-  });
-
   describe('POST /api/shorten', () => {
+    beforeEach(async () => {
+      const keys = await redisClient.keys(`rl::*`);
+      if (keys.length > 0) {
+        await redisClient.del(keys);
+      }
+    });
+
     it('should return a short URL for a valid URL', async () => {
       const response = await request(app)
         .post('/api/shorten')

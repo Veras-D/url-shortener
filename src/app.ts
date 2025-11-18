@@ -1,18 +1,24 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import healthRoutes from '@modules/core/health.routes';
-import { urlRoutes } from '@modules/url/url.routes';
+import { createUrlRoutes } from '@modules/url/url.routes';
 import { errorHandler } from '@common/middlewares/errorHandler';
+import { rateLimit } from 'express-rate-limit';
 
 dotenv.config();
 
-const app = express();
+const createApp = (rateLimiter: ReturnType<typeof rateLimit>) => {
+  const app = express();
 
-app.use(express.json());
+  app.set('trust proxy', 1);
+  app.use(express.json());
 
-app.use('/health', healthRoutes);
-app.use('/api', urlRoutes);
+  app.use('/health', healthRoutes);
+  app.use('/api', createUrlRoutes(rateLimiter));
 
-app.use(errorHandler);
+  app.use(errorHandler);
 
-export default app;
+  return app;
+};
+
+export default createApp;
