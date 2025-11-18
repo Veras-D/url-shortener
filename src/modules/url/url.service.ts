@@ -25,8 +25,6 @@ export const createShortUrl = async (originalUrl: string, userId?: string | Type
     finalUserId = new Types.ObjectId();
   } else if (userId) {
     finalUserId = userId;
-  } else {
-    finalUserId = new Types.ObjectId();
   }
 
   const newUrl = new Url({
