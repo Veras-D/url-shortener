@@ -22,11 +22,8 @@ export const createShortUrl = async (originalUrl: string, userId: string | Types
   const newUrl = new Url({
     originalUrl,
     shortCode,
+    userId,
   });
-
-  if (userId !== 'anonymous') {
-    newUrl.userId = userId as Types.ObjectId;
-  }
 
   await newUrl.save();
   return newUrl;
