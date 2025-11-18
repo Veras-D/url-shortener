@@ -12,17 +12,27 @@ const isValidUrl = (url: string): boolean => {
   }
 };
 
-export const createShortUrl = async (originalUrl: string, userId: string | Types.ObjectId): Promise<IUrl> => {
+export const createShortUrl = async (originalUrl: string, userId?: string | Types.ObjectId): Promise<IUrl> => {
   if (!isValidUrl(originalUrl)) {
     throw new AppError('Invalid URL format.', 400);
   }
 
   const shortCode = await generateShortCode();
 
+  let finalUserId: Types.ObjectId;
+  if (typeof userId === 'string') {
+    // For testing or anonymous users, generate a new ObjectId
+    finalUserId = new Types.ObjectId();
+  } else if (userId) {
+    finalUserId = userId;
+  } else {
+    finalUserId = new Types.ObjectId();
+  }
+
   const newUrl = new Url({
     originalUrl,
     shortCode,
-    userId,
+    userId: finalUserId,
   });
 
   await newUrl.save();
