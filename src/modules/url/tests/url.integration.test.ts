@@ -3,6 +3,7 @@ import { Express } from 'express';
 import { connectDB, disconnectDB } from '../../../config/mongo';
 import { connectRabbitMQ, disconnectRabbitMQ } from '../../../config/rabbitmq';
 import { connectRedis, disconnectRedis, redisClient } from '../../../config/redis';
+import { initRateLimiter } from '../../../libs/rateLimiter';
 import Url from '../url.model';
 
 let app: Express;
@@ -12,6 +13,7 @@ describe('URL Integration Tests', () => {
     await connectDB();
     await connectRabbitMQ();
     await connectRedis();
+    initRateLimiter();
     app = (await import('../../../app')).default;
   }, 30000);
 
