@@ -1,22 +1,29 @@
 import request from 'supertest';
-import app from '../../../app';
+import { Express } from 'express';
 import { connectDB, disconnectDB } from '../../../config/mongo';
 import { connectRabbitMQ, disconnectRabbitMQ } from '../../../config/rabbitmq';
-import { connectRedis, disconnectRedis } from '../../../config/redis';
+import { connectRedis, disconnectRedis, redisClient } from '../../../config/redis';
 import Url from '../url.model';
+
+let app: Express;
 
 describe('URL Integration Tests', () => {
   beforeAll(async () => {
     await connectDB();
     await connectRabbitMQ();
     await connectRedis();
-  });
+    app = (await import('../../../app')).default;
+  }, 30000);
 
   afterAll(async () => {
     await Url.deleteMany({});
     await disconnectDB();
     await disconnectRabbitMQ();
     await disconnectRedis();
+  });
+
+  afterEach(async () => {
+    await redisClient.flushDb();
   });
 
   describe('POST /api/shorten', () => {
@@ -45,6 +52,25 @@ describe('URL Integration Tests', () => {
         .send({});
 
       expect(response.status).toBe(400);
+    });
+  });
+
+  describe('Rate Limiting', () => {
+    it('should return a 429 error when the rate limit is exceeded', async () => {
+      const agent = request.agent(app);
+      const promises = [];
+      for (let i = 0; i < 6; i++) {
+        promises.push(
+          agent.post('/api/shorten').send({ url: 'https://www.google.com' })
+        );
+      }
+      const responses = await Promise.all(promises);
+      const lastResponse = responses[responses.length - 1];
+      expect(lastResponse.status).toBe(429);
+      expect(lastResponse.body).toHaveProperty(
+        'message',
+        'Too many requests, please try again later.'
+      );
     });
   });
 
