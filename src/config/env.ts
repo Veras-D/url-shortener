@@ -9,6 +9,8 @@ interface IEnvConfig {
   REDIS_URL: string;
   RABBITMQ_URL: string;
   TOP_N_URLS: string;
+  RATE_LIMIT_WINDOW_MS: string;
+  RATE_LIMIT_MAX_REQUESTS: string;
 }
 
 const env: IEnvConfig = {
@@ -18,6 +20,8 @@ const env: IEnvConfig = {
   REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
   RABBITMQ_URL: process.env.RABBITMQ_URL || 'amqp://localhost:5672',
   TOP_N_URLS: process.env.TOP_N_URLS || '100',
+  RATE_LIMIT_WINDOW_MS: process.env.RATE_LIMIT_WINDOW_MS || '60000',
+  RATE_LIMIT_MAX_REQUESTS: process.env.RATE_LIMIT_MAX_REQUESTS || '5',
 };
 
 export default env;

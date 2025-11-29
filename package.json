@@ -21,13 +21,16 @@
   "license": "MIT",
   "dependencies": {
     "@types/express": "^5.0.5",
+    "@types/rate-limit-redis": "^1.7.4",
     "amqplib": "^0.10.9",
     "dotenv": "^17.2.3",
     "eslint": "^9.39.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
     "mongoose": "^8.19.2",
-    "prettier": "^3.6.2",
     "pino": "^9.2.0",
+    "prettier": "^3.6.2",
+    "rate-limit-redis": "^4.3.0",
     "redis": "^5.9.0",
     "typescript": "^5.9.3",
     "zod": "^4.1.12"
