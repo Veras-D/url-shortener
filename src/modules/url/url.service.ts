@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 import { get, set, del, incrementScore, getTopUrls, removeLowestRankingUrls, redisClient } from '@config/redis';
 import env from '@config/env';
 
-const isValidUrl = (url: string): boolean => {
+export const isValidUrl = (url: string): boolean => {
   try {
     new URL(url);
     return true;
